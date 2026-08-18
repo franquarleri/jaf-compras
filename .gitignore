@@ -1,0 +1,15 @@
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.swp
+
+# Node (por si más adelante se agrega tooling)
+node_modules/
+
+# Temporales de Excel
+~$*.xlsx

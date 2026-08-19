@@ -45,8 +45,8 @@ function pantallaSinConfigurar() {
          (Project Settings &rarr; Data API):</p>
       <pre><code>export const SUPABASE_URL = 'https://xxxxx.supabase.co';
 export const SUPABASE_ANON_KEY = 'eyJhbGciOi...';</code></pre>
-      <p class="ayuda">Antes de eso, corré <code>sql/01_schema.sql</code> y <code>sql/02_seed.sql</code>
-         en el SQL Editor de Supabase. Está todo explicado en el README.</p>
+      <p class="ayuda">Antes de eso hay que aplicar las migraciones de
+         <code>supabase/migrations/</code> en la base. Está todo explicado en el README.</p>
     </div>`;
 }
 
@@ -91,8 +91,8 @@ function pantallaError(err) {
       <h1 class="marca">JAF <span>Compras</span></h1>
       <h2>No se pudieron cargar los datos</h2>
       <p class="error-login">${esc(err.message)}</p>
-      <p class="ayuda">Lo más probable: falta correr <code>sql/01_schema.sql</code> y
-         <code>sql/02_seed.sql</code> en Supabase, o el RLS está bloqueando a tu usuario.</p>
+      <p class="ayuda">Lo más probable: faltan aplicar las migraciones de
+         <code>supabase/migrations/</code>, o el RLS está bloqueando a tu usuario.</p>
       <button class="btn" id="reintentar">Reintentar</button>
       <button class="btn" id="cerrar-sesion">Cerrar sesión</button>
     </div>`;

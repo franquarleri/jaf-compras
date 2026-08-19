@@ -19,11 +19,21 @@ Son tres pasos. Toma unos 15 minutos la primera vez.
 1. Entrá a [supabase.com](https://supabase.com) y creá un proyecto.
    Elegí la región **South America (São Paulo)**: es la más cercana.
 2. Guardá la contraseña de la base en algún lado seguro. No se puede recuperar.
-3. Cuando el proyecto termine de levantar, andá a **SQL Editor → New query**.
-4. Pegá y ejecutá el contenido de [`sql/01_schema.sql`](sql/01_schema.sql).
-   Crea las tablas y activa la seguridad por fila.
-5. Repetí con [`sql/02_seed.sql`](sql/02_seed.sql). Carga los ~50 parámetros
-   con los valores que ya tenías en el Excel.
+3. Cuando el proyecto termine de levantar, aplicá las migraciones de
+   [`supabase/migrations/`](supabase/migrations/), en orden:
+   - `20260818120000_esquema.sql` crea las tablas y activa la seguridad por fila.
+   - `20260818120100_parametros_iniciales.sql` carga los ~50 parámetros con los
+     valores que ya tenías en el Excel.
+
+   Se pueden aplicar de dos maneras. Copiando y pegando cada archivo en
+   **SQL Editor → New query**, o con el CLI:
+
+   ```bash
+   npm install -g supabase
+   supabase login
+   supabase link --project-ref <ref-de-tu-proyecto>
+   supabase db push
+   ```
 
 ### 2 · Crear tu usuario y cerrar la puerta
 
@@ -95,9 +105,9 @@ app/
   ui.js               formato de números, DOM, panel lateral, avisos
   main.js             login, navegación y ruteo
   views/              una pantalla por archivo
-sql/
-  01_schema.sql       tablas + seguridad (RLS)
-  02_seed.sql         parámetros iniciales
+supabase/migrations/
+  ..._esquema.sql              tablas + seguridad (RLS)
+  ..._parametros_iniciales.sql parámetros iniciales
 ```
 
 **La regla de oro: la base guarda datos crudos, nunca resultados.** Costo puesto,

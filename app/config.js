@@ -6,8 +6,8 @@
 //   SUPABASE_ANON_KEY -> "anon public" (también figura como "publishable")
 //
 // La anon key está pensada para vivir en el navegador: no es un secreto.
-// Lo que protege los datos es el RLS de sql/01_schema.sql, que exige sesión
-// iniciada. NUNCA pongas acá la "service_role" key: esa sí se saltea el RLS.
+// Lo que protege los datos es el RLS que crean las migraciones, y que exige
+// sesión iniciada. NUNCA pongas acá la "service_role" key: esa sí saltea el RLS.
 // =====================================================================
 
 export const SUPABASE_URL = 'PEGAR_AQUI_TU_PROJECT_URL';

@@ -8,59 +8,54 @@ contra la planilla, pero con los datos en una base y accesibles desde cualquier 
 - **Base de datos y login:** Supabase (Postgres + Auth + RLS).
 - **Hosting:** GitHub Pages.
 
+**En línea:** <https://franquarleri.github.io/jaf-compras/>
+
 ---
 
-## Puesta en marcha
+## Estado actual
 
-Son tres pasos. Toma unos 15 minutos la primera vez.
+Ya está todo montado y funcionando:
 
-### 1 · Crear el proyecto en Supabase
+| | |
+|---|---|
+| Proyecto Supabase | `JAF-COMPRAS` · organización `JAF` · São Paulo (`sa-east-1`) |
+| Ref | `odvdsnapmguprdihuxie` |
+| Migraciones | aplicadas — 5 tablas, 5 policies, 49 parámetros, 10 bandas de envío |
+| RLS | activo en las 5 tablas. Sin sesión, la API devuelve lista vacía |
+| Auto-registro | **cerrado** (`signup_disabled`) |
+| Site URL | apunta a GitHub Pages, para que los mails de recuperación vuelvan a la app |
 
-1. Entrá a [supabase.com](https://supabase.com) y creá un proyecto.
-   Elegí la región **South America (São Paulo)**: es la más cercana.
-2. Guardá la contraseña de la base en algún lado seguro. No se puede recuperar.
-3. Cuando el proyecto termine de levantar, aplicá las migraciones de
-   [`supabase/migrations/`](supabase/migrations/), en orden:
-   - `20260818120000_esquema.sql` crea las tablas y activa la seguridad por fila.
-   - `20260818120100_parametros_iniciales.sql` carga los ~50 parámetros con los
-     valores que ya tenías en el Excel.
+Este sistema vive en un proyecto propio y aislado. No comparte base, ni usuarios, ni
+configuración con ningún otro sistema.
 
-   Se pueden aplicar de dos maneras. Copiando y pegando cada archivo en
-   **SQL Editor → New query**, o con el CLI:
+### Lo único que falta: crear tu usuario
 
-   ```bash
-   npm install -g supabase
-   supabase login
-   supabase link --project-ref <ref-de-tu-proyecto>
-   supabase db push
-   ```
+Como el auto-registro está cerrado, los usuarios se crean a mano:
 
-### 2 · Crear tu usuario y cerrar la puerta
+**Authentication → Users → Add user → Create new user.** Poné tu email y una
+contraseña, y marcá *Auto Confirm User*. Con eso ya entrás.
 
-1. **Authentication → Users → Add user → Create new user.**
-   Poné tu email y una contraseña. Marcá *Auto Confirm User*.
-2. **Authentication → Sign In / Providers → Email**, y **desactivá
-   "Allow new users to sign up"**.
+Para sumar a alguien más, mismo camino. No hay forma de registrarse desde afuera:
+si el registro quedara abierto, cualquiera con la URL podría crearse una cuenta y
+ver tus costos, tus márgenes y tus proveedores.
 
-   Este paso no es opcional. Si el registro queda abierto, cualquiera que
-   tenga la URL del sistema puede crearse una cuenta y ver tus costos,
-   tus márgenes y tus proveedores.
+> **¿Es seguro que la clave esté en el código?** Sí. `app/config.js` lleva la
+> *publishable key*, diseñada para vivir en el navegador. No da acceso por sí sola:
+> lo que protege los datos es el RLS, que exige sesión iniciada. Está verificado —
+> una consulta sin sesión a `parametros` devuelve `[]` aunque la tabla tenga 49 filas.
+> La que **nunca** va acá es una *secret key* o la `service_role`: esas saltean el RLS.
 
-3. Para sumar a alguien más, volvés a **Add user**. No hay auto-registro.
+### Si alguna vez hay que rehacerlo desde cero
 
-### 3 · Conectar el frontend
+Aplicá las migraciones de [`supabase/migrations/`](supabase/migrations/) en orden,
+copiándolas en **SQL Editor → New query** o con el CLI:
 
-1. En Supabase, **Project Settings → Data API**. Copiá:
-   - **Project URL** (algo como `https://abcdefgh.supabase.co`)
-   - **anon public** key (una cadena larga que arranca con `eyJ`)
-2. Abrí `app/config.js` y pegá los dos valores.
-3. Guardá, commiteá y subí.
-
-> **¿Es seguro que la anon key esté en el código?** Sí. Está diseñada para
-> vivir en el navegador y no da acceso por sí sola: lo que protege los datos
-> es el RLS del paso 1, que exige sesión iniciada para leer o escribir
-> cualquier tabla. La que **nunca** va acá es la `service_role` key, que sí
-> saltea el RLS.
+```bash
+npm install -g supabase
+supabase login
+supabase link --project-ref odvdsnapmguprdihuxie
+supabase db push
+```
 
 ---
 
@@ -80,15 +75,14 @@ Abrí <http://localhost:8000>.
 
 ## Publicar en GitHub Pages
 
-En el repo: **Settings → Pages → Source: Deploy from a branch → `main` / `root`.**
-En un minuto queda en `https://<usuario>.github.io/<repo>/`.
+Ya está activo: **Settings → Pages → Deploy from a branch → `main` / `root`**.
+Cada `git push` a `main` republica el sitio en un minuto.
 
-Cada `git push` a `main` republica el sitio.
-
-Si el repo es privado, Pages requiere GitHub Pro. Con cuenta gratuita tenés dos
-opciones: hacer público el repo (el código no tiene secretos, pero sí queda a la
-vista tu modelo de costos), o publicar en [Netlify](https://netlify.com) o
-[Vercel](https://vercel.com), que sirven repos privados sin costo.
+El repo es público porque Pages no sirve repos privados con cuenta gratuita. No hay
+secretos en el código, pero sí queda a la vista el modelo de costos. Si en algún
+momento eso molesta, la alternativa es pasar el repo a privado y publicar en
+[Netlify](https://netlify.com) o [Vercel](https://vercel.com), que sirven repos
+privados sin costo.
 
 ---
 

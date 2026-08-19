@@ -1,17 +1,19 @@
 // =====================================================================
 // CONEXIÓN A SUPABASE
 //
-// Estos dos valores salen de: Supabase > Project Settings > Data API
-//   SUPABASE_URL      -> "Project URL"
-//   SUPABASE_ANON_KEY -> "anon public" (también figura como "publishable")
+// Proyecto: JAF-COMPRAS · organización JAF · región São Paulo (sa-east-1)
+// Estos valores salen de: Supabase > Project Settings > API Keys
 //
-// La anon key está pensada para vivir en el navegador: no es un secreto.
-// Lo que protege los datos es el RLS que crean las migraciones, y que exige
-// sesión iniciada. NUNCA pongas acá la "service_role" key: esa sí saltea el RLS.
+// La publishable key está pensada para vivir en el navegador: no es un
+// secreto. Lo que protege los datos es el RLS que crean las migraciones y
+// que exige sesión iniciada: sin login, la API devuelve una lista vacía
+// aunque la tabla tenga datos.
+//
+// NUNCA pongas acá una "secret key" ni la "service_role": esas saltean el RLS.
 // =====================================================================
 
-export const SUPABASE_URL = 'PEGAR_AQUI_TU_PROJECT_URL';
-export const SUPABASE_ANON_KEY = 'PEGAR_AQUI_TU_ANON_KEY';
+export const SUPABASE_URL = 'https://odvdsnapmguprdihuxie.supabase.co';
+export const SUPABASE_ANON_KEY = 'sb_publishable_wnF5MsqxdLh7kZdeo3Y0ZQ_fspVr62W';
 
 export const configurado =
   !SUPABASE_URL.startsWith('PEGAR') && !SUPABASE_ANON_KEY.startsWith('PEGAR');
